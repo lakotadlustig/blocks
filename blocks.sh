@@ -1,7 +1,7 @@
 #!/bin/bash
 #Script to check for blocks in multiple firewalls
 #Lakota Lustig 04/21/2020
-#Version 1.2
+#Version 1.3
 
 #INPUT
 
@@ -17,15 +17,14 @@ NC='\033[0m' #NO COLOR
 
 #BLOCK CHECKS
 
-CSF=`grep "$IP" /var/log/lfd.log`
-CSF2=`csf -g 179.101.139.130 | grep IPSET`
+CSF=`csf -g "$IP" | grep csf.deny`
 OSSEC=`grep "$IP" /var/ossec/logs/active-responses.log | tail -1`
 DA=`grep "$IP" /usr/local/directadmin/data/admin/ip_blacklist`
 CSFPRE=`csf -g $IP | grep DROP`
 
 
-if [[ -n $CSF2 ]]; then
-    echo -e "${RED}CSF BLOCK: \n\n$CSF2\n${NC}"
+if [[ -n $CSF ]]; then
+    echo -e "${RED}CSF BLOCK: \n\n$CSF\n${NC}"
 else
     echo -e "NO CSF BLOCKS\n"
 fi
